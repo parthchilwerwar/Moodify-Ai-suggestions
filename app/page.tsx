@@ -4,6 +4,7 @@ import { useState } from 'react'
 import MoodInput from './components/MoodInput'
 import Playlist from './components/Playlist'
 import LoadingSpinner from './components/LoadingSpinner'
+import Header  from './components/Header'
 
 interface Track {
   title: string
@@ -46,6 +47,8 @@ export default function Home() {
   }
 
   return (
+    <>
+    <Header />
     <main className="px-4 py-12 flex flex-col items-center">
       <p className="text-5xl font-bold text-center mb-8 text-white">Moodify</p>
       <p className="text-xl text-center mb-12 text-white">Generate a custom playlist based on your mood with Ai </p>
@@ -56,5 +59,6 @@ export default function Home() {
         {playlist && <Playlist tracks={playlist} />}
       </div>
     </main>
+    </>
   )
 }
