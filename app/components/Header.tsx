@@ -2,7 +2,7 @@
 
 const Header = () => {
   return (
-    <header className="bg-gradient-to-r from-purple-800 to-indigo-800 p-4">
+    <header className="bg-gradient-to-r from-purple-800 to-purple-800 p-4">
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-3xl font-bold text-white">Moodify</h1>
         <nav>
