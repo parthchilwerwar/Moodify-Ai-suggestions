@@ -3,22 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 255, 255, 255; /* Set text color to white */
-  --background-start-rgb: 0, 0, 0; /* Start of the gradient is black */
-  --background-end-rgb: 0, 0, 0;   /* End of the gradient is black */
+  --foreground-rgb: 255, 255, 255; 
+  --background-start-rgb: 0, 0, 0; 
+  --background-end-rgb: 0, 0, 0;   
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255; /* Text remains white in dark mode */
-    --background-start-rgb: 0, 0, 0; /* Background remains black */
-    --background-end-rgb: 0, 0, 0;   /* Background remains black */
+    --foreground-rgb: 255, 255, 255; 
+    --background-start-rgb: 0, 0, 0; 
+    --background-end-rgb: 0, 0, 0;   
   }
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: #000000; /* Body background is solid black */
+  background: #000000; 
 }
 
 @layer utilities {
@@ -26,3 +26,9 @@ body {
     text-wrap: balance;
   }
 }
+
+@keyframes textGradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
