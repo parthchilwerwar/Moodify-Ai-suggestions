@@ -24,29 +24,38 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
   const handlePlaylistClick = (index: number) => {
     setSelectedPlaylistIndex(index);
     onPlaylistSelect(playlists[index]);
+    if (window.innerWidth < 768) {
+      setIsOpen(false);
+    }
   };
 
   return (
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-3 bg-gray-700 text-white rounded-r-md shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-300 ${
-          isOpen ? 'transform translate-x-64' : ''
+        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-2 md:p-3 bg-gray-700 text-white rounded-r-md shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-300 ${
+          isOpen ? 'transform translate-x-64 md:translate-x-80' : ''
         }`}
         aria-label={isOpen ? "Close recent playlists" : "Open recent playlists"}
         aria-expanded={isOpen}
       >
-        {isOpen ? <FaChevronLeft size={20} /> : <FaChevronRight size={20} />}
+        {isOpen ? <FaChevronLeft size={16} /> : <FaChevronRight size={16} />}
       </button>
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsOpen(false)}
+      ></div>
       <aside
-        className={`fixed left-0 top-0 h-full w-64 bg-gray-800 p-4 overflow-y-auto transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 h-full w-64 md:w-80 bg-gray-800 p-4 overflow-y-auto transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? 'transform translate-x-0' : 'transform -translate-x-full'
         }`}
         aria-hidden={!isOpen}
       >
         <h2 className="text-xl font-bold mb-6 text-gray-200">Recent Playlists</h2>
         {playlists.length === 0 ? (
-          <p className="text-gray-400">No recent playlists yet.</p>
+          <p className="text-base text-gray-400">No recent playlists yet.</p>
         ) : (
           playlists.map((playlist, index) => (
             <div 

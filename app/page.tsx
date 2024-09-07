@@ -62,18 +62,18 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-900 relative">
-        <div className="relative z-10 w-full max-w-md flex flex-col items-center">
-          <h1 className="text-5xl font-bold text-center mb-8 text-white animate-text-gradient">Moodify</h1>
-          <p className="text-xl text-center mb-12 text-gray-300">Generate a custom playlist based on your mood with AI</p>
+      <main className="flex-grow container mx-auto px-4 py-8 md:py-12 flex flex-col items-center justify-center relative z-0">
+        <div className="w-full max-w-md flex flex-col items-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 md:mb-8 text-white animate-text-gradient">Moodify</h1>
+          <p className="text-lg md:text-xl text-center mb-8 md:mb-12 text-gray-300">Generate a custom playlist based on your mood with AI</p>
           <MoodInput onMoodSubmit={handleMoodSubmit} />
           {isLoading && <LoadingSpinner />}
           {error && <p className="text-red-300 text-center mb-4 bg-red-900 bg-opacity-25 p-3 rounded">{error}</p>}
           {playlist && (
             <>
-              <h2 className="text-2xl font-bold mb-4 text-gray-200">Playlist for {currentMood}</h2>
+              <h2 className="text-xl md:text-2xl font-bold mb-4 text-gray-200">Playlist for {currentMood}</h2>
               <Playlist tracks={playlist} />
             </>
           )}
