@@ -26,13 +26,13 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
   return (
     <form onSubmit={handleSubmit} className="mb-8 w-full">
       <div className="flex flex-col space-y-4">
-        <div className="flex justify-center gap-2 mb-4">
+        <div className="flex flex-wrap justify-center gap-2 mb-4">
           {moodEmojis.map(({ emoji, mood: emojiMood }) => (
             <button
               key={emojiMood}
               type="button"
               onClick={() => setMood(emojiMood)}
-              className={`text-2xl p-2 rounded-full ${mood === emojiMood ? 'bg-purple-600' : 'bg-gray-200'}`}
+              className={`text-xl md:text-2xl p-2 rounded-full ${mood === emojiMood ? 'bg-purple-600' : 'bg-gray-200'}`}
             >
               {emoji}
             </button>
@@ -43,11 +43,11 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
           value={mood}
           onChange={(e) => setMood(e.target.value)}
           placeholder="What's your mood tonight?"
-          className="w-full p-4 rounded-lg bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 text-lg transition duration-300 ease-in-out"
+          className="w-full p-3 md:p-4 rounded-lg bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 text-base md:text-lg transition duration-300 ease-in-out"
         />
         <button
           type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 md:py-3 px-4 rounded-lg text-base md:text-lg transition duration-300"
         >
           Generate Playlist
         </button>
