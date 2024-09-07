@@ -64,7 +64,3 @@ Moodify is an AI-powered playlist generator that creates custom playlists based 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
