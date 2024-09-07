@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const { mood } = await request.json();
   const cleanedMood = mood.replace(/\uD83D[\uDE00-\uDE4F]/g, '').trim();
 
-  const fixedPlaylistLength = 5; // Fixed playlist length
+  const fixedPlaylistLength = 5; 
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });

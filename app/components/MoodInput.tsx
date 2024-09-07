@@ -42,7 +42,7 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
           type="text"
           value={mood}
           onChange={(e) => setMood(e.target.value)}
-          placeholder="Enter your mood"
+          placeholder="What's your mood tonight?"
           className="w-full p-4 rounded-lg bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 text-lg transition duration-300 ease-in-out"
         />
         <button
