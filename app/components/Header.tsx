@@ -1,5 +1,9 @@
 'use client'
 
+import CIcon from '@coreui/icons-react'; 
+import { cibBuyMeACoffee } from '@coreui/icons'; 
+
+
 const Header = () => {
   return (
     <header className="bg-purple-600 p-3 md:p-4">
