@@ -1,6 +1,6 @@
 # 🎵 Moodify
 
-![Moodify Logo](favicon.ico) 
+![Moodify Logo](file:///c%3A/Users/Parth%20Chilwerwar/Desktop/my-mood-playlist/app/favicon.ico) 
 
 Moodify is an AI-powered playlist generator that creates custom playlists based on your mood. Let your emotions guide your music! 🎶😊😢🥳
 
