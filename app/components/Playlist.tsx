@@ -18,7 +18,7 @@ export default function Playlist({ tracks }: PlaylistProps) {
       transition={{ duration: 0.5 }}
       className="bg-gray-800 rounded-lg p-4 md:p-6 w-full shadow-lg"
     >
-      <h2 className="text-xl md:text-2xl font-bold mb-4 text-purple-300">Your Mood-Based Playlist</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-4 text-purple-300">🫵's Mood-Based Playlist</h2>
       <ul className="space-y-3">
         {tracks.map((track, index) => (
           <motion.li 
@@ -56,6 +56,6 @@ export default function Playlist({ tracks }: PlaylistProps) {
       </ul>
     </motion.div>
   )
-  
+
 }
 
