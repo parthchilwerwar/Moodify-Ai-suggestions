@@ -17,6 +17,6 @@ const config: Config = {
   },
   plugins: [],
 };
+
 export default config;
 
-// tsconfig,config file 

@@ -82,6 +82,6 @@ export default function Home() {
       <RecentPlaylistsSidebar playlists={recentPlaylists} onPlaylistSelect={handlePlaylistSelect} />
     </div>
   )
+  
 }
 
-//page.tsx

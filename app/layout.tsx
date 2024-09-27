@@ -21,7 +21,7 @@ export default function RootLayout({
       </body>
     </html>
   )
+
 }
 
 
-//structure of the website 
