@@ -87,3 +87,6 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
 };
 
 export default RecentPlaylistsSidebar;
+
+
+// History 
