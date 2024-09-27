@@ -57,3 +57,5 @@ export default function Playlist({ tracks }: PlaylistProps) {
     </motion.div>
   )
 }
+
+// Playlist generator 
