@@ -54,7 +54,7 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
       </div>
     </form>
   )
+
 }
 
 
-//Input taker 

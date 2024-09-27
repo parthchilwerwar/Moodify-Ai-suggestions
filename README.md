@@ -1,6 +1,6 @@
 # 🎵 Moodify
 
-![Moodify Logo](path/to/your/logo.png) 
+![Moodify Logo](favicon.ico) 
 
 Moodify is an AI-powered playlist generator that creates custom playlists based on your mood. Let your emotions guide your music! 🎶😊😢🥳
 

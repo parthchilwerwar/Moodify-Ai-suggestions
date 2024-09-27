@@ -28,8 +28,8 @@ const Header = () => {
       </div>
     </header>
   );
+  
 };
 
 export default Header;
 
-//Proper header 

@@ -84,9 +84,9 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
       </aside>
     </>
   );
+  
 };
 
 export default RecentPlaylistsSidebar;
 
 
-// History 
