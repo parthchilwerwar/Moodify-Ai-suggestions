@@ -67,7 +67,7 @@ export default function Home() {
       <main className="flex-grow container mx-auto px-4 py-8 md:py-12 flex flex-col items-center justify-center relative z-0">
         <div className="w-full max-w-md flex flex-col items-center">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 md:mb-8 text-white animate-text-gradient">Moodify</h1>
-          <p className="text-lg md:text-xl text-center mb-8 md:mb-12 text-gray-300">Generate a custom playlist based on your mood with AI</p>
+          <p className="text-lg md:text-xl text-center mb-8 md:mb-12 text-gray-300">Generate a custom playlist based on your mood with AI ✨</p>
           <MoodInput onMoodSubmit={handleMoodSubmit} />
           {isLoading && <LoadingSpinner />}
           {error && <p className="text-red-300 text-center mb-4 bg-red-900 bg-opacity-25 p-3 rounded">{error}</p>}
