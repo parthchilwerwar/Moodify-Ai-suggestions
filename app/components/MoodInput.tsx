@@ -17,10 +17,18 @@ const moodEmojis = [
 
 export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
   const [mood, setMood] = useState('')
+  const [error, setError] = useState<string | null>(null) 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    onMoodSubmit(mood)
+    e.preventDefault();
+
+    if (!mood) {
+      setError('Please select or enter a mood.'); 
+      return; 
+    }
+
+    setError(null); 
+    onMoodSubmit(mood); 
   }
 
   return (
@@ -32,7 +40,7 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
               key={emojiMood}
               type="button"
               onClick={() => setMood(emojiMood)}
-              className={`text-xl md:text-2xl p-2 rounded-full ${mood === emojiMood ? 'bg-purple-600' : 'bg-gray-200'}`}
+              className={`text-xl md:text-2xl p-2 rounded-full ${mood === emojiMood ? 'bg-blue-neon' : 'bg-white-neon'}`}
             >
               {emoji}
             </button>
@@ -45,16 +53,16 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
           placeholder="What's your mood tonight?"
           className="w-full p-3 md:p-4 rounded-lg bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 text-base md:text-lg transition duration-300 ease-in-out"
         />
+        {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
         <button
           type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 md:py-3 px-4 rounded-lg text-base md:text-lg transition duration-300"
+          className="w-full bg-blue-600 hover:bg-blue-neon text-white font-bold py-2 md:py-3 px-4 rounded-lg text-base md:text-lg transition duration-300"
         >
           Generate Playlist
         </button>
       </div>
     </form>
   )
-
 }
 
 
