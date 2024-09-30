@@ -4,6 +4,7 @@ import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 interface Track {
   title: string;
   artist: string;
+  
   searchQuery: string;
 }
 
@@ -60,7 +61,7 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
           playlists.map((playlist, index) => (
             <div 
               key={index} 
-              className={`mb-4 p-4 bg-gray-800 rounded-lg shadow-md cursor-pointer transition-colors duration-200 transform hover:scale-105 ${
+              className={`mb-4 p-4 bg-gray-800 rounded-lg shadow-md cursor-pointer transition-colors duration-200 transform hover:scale-104 ${
                 selectedPlaylistIndex === index ? 'bg-gray-700' : 'hover:bg-gray-700'
               }`}
               onClick={() => handlePlaylistClick(index)}
