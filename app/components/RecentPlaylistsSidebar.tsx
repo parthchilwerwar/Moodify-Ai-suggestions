@@ -33,13 +33,13 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-2 md:p-3 bg-gray-700 text-white rounded-r-md shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-300 ${
+        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-3 bg-gray-700 text-white rounded-r-md shadow-lg hover:bg-neon-purple focus:outline-none focus:ring-2 focus:ring-gray-700 transition-all duration-300 ${
           isOpen ? 'transform translate-x-64 md:translate-x-80' : ''
         }`}
         aria-label={isOpen ? "Close recent playlists" : "Open recent playlists"}
         aria-expanded={isOpen}
       >
-        {isOpen ? <FaChevronLeft size={16} /> : <FaChevronRight size={16} />}
+        {isOpen ? <FaChevronLeft size={20} /> : <FaChevronRight size={20} />}
       </button>
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
@@ -48,20 +48,20 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
         onClick={() => setIsOpen(false)}
       ></div>
       <aside
-        className={`fixed left-0 top-0 h-full w-64 md:w-80 bg-gray-800 p-4 overflow-y-auto transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed left-0 top-0 h-full w-64 md:w-80 bg-gray-900 p-6 overflow-y-auto transition-transform duration-300 ease-in-out z-50 shadow-lg ${
           isOpen ? 'transform translate-x-0' : 'transform -translate-x-full'
         }`}
         aria-hidden={!isOpen}
       >
-        <h2 className="text-xl font-bold mb-6 text-gray-200">Recent Playlists</h2>
+        <h2 className="text-2xl font-bold mb-6 text-gray-200">Recent Playlists</h2>
         {playlists.length === 0 ? (
           <p className="text-base text-gray-400">No recent playlists yet.</p>
         ) : (
           playlists.map((playlist, index) => (
             <div 
               key={index} 
-              className={`mb-6 p-3 bg-gray-700 rounded-lg shadow-md cursor-pointer transition-colors duration-200 ${
-                selectedPlaylistIndex === index ? 'bg-gray-600' : 'hover:bg-gray-650'
+              className={`mb-4 p-4 bg-gray-800 rounded-lg shadow-md cursor-pointer transition-colors duration-200 transform hover:scale-105 ${
+                selectedPlaylistIndex === index ? 'bg-gray-700' : 'hover:bg-gray-700'
               }`}
               onClick={() => handlePlaylistClick(index)}
             >
@@ -84,9 +84,6 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
       </aside>
     </>
   );
-  
 };
 
 export default RecentPlaylistsSidebar;
-
-
