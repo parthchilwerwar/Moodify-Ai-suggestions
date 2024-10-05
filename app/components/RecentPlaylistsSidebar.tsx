@@ -34,7 +34,7 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-3 bg-gray-700 text-white rounded-r-md shadow-lg hover:bg-neon-purple focus:outline-none focus:ring-2 focus:ring-gray-700 transition-all duration-300 ${
+        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-1.5 bg-gray-700 text-white rounded-r-md shadow-lg hover:bg-neon-purple focus:outline-none focus:ring-2 focus:ring-gray-700 transition-all duration-300 ${
           isOpen ? 'transform translate-x-64 md:translate-x-80' : ''
         }`}
         aria-label={isOpen ? "Close recent playlists" : "Open recent playlists"}
