@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   const fixedPlaylistLength = 5; 
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
     const prompt = `Generate a playlist of ${fixedPlaylistLength} songs that match the mood: ${cleanedMood}. Include a diverse mix of:
     1. Songs that specifically match the given mood or theme
     2. Classic hits
