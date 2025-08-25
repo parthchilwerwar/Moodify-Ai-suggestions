@@ -69,6 +69,14 @@ export default function Home() {
         body: JSON.stringify({ mood }),
       });
       
+      // Check if response is HTML instead of JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const textResponse = await response.text();
+        console.error('Non-JSON response received:', textResponse.substring(0, 200));
+        throw new Error('Server returned an invalid response format. Please try again.');
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -88,6 +96,17 @@ export default function Home() {
           },
           body: JSON.stringify({ tracks: data.playlist }),
         });
+        
+        // Check music response format
+        const musicContentType = musicResponse.headers.get('content-type');
+        if (!musicContentType || !musicContentType.includes('application/json')) {
+          console.warn('Music API returned non-JSON response, using basic playlist');
+          setPlaylist(data.playlist);
+          setRecentPlaylists(prev => [{mood, tracks: data.playlist}, ...prev].slice(0, 5));
+          setIsLoading(false);
+          setLoadingStage('');
+          return;
+        }
         
         setLoadingStage('Fetching YouTube data...');
         const musicData = await musicResponse.json();
@@ -112,8 +131,8 @@ export default function Home() {
           setIsLoading(false);
           setLoadingStage('');
         }
-      } catch (musicError) {
-        console.warn('Using basic playlist');
+      } catch (musicError: any) {
+        console.warn('Music enrichment failed, using basic playlist:', musicError.message);
         setPlaylist(data.playlist);
         setRecentPlaylists(prev => [{mood, tracks: data.playlist}, ...prev].slice(0, 5));
         setIsLoading(false);
@@ -121,7 +140,14 @@ export default function Home() {
       }
       
     } catch (err: any) {
-      const errorMessage = err?.message || 'Something went wrong. Please try again.';
+      let errorMessage = 'Something went wrong. Please try again.';
+      
+      if (err.message?.includes('JSON')) {
+        errorMessage = 'Server communication error. Please refresh the page and try again.';
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
       setError(errorMessage);
       setLoadingStage('');
       console.error('Playlist generation error:', err);
@@ -136,52 +162,52 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-theme-background to-theme-surface flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-theme-background to-theme-surface flex flex-col overflow-x-hidden">
       <Header />
-      <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 md:py-12 relative z-0">
-        <div className="w-full max-w-4xl mx-auto text-center space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-bold text-theme-text animate-text-gradient">
+      <main className="flex-grow flex flex-col items-center justify-center px-3 sm:px-4 lg:px-6 xl:px-8 py-6 sm:py-8 md:py-12 relative z-0 safe-area-inset min-h-0">
+        <div className="w-full max-w-7xl mx-auto text-center space-y-6 sm:space-y-8 flex-1 flex flex-col justify-center">
+          <div className="space-y-3 sm:space-y-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-theme-text animate-text-gradient leading-tight px-2">
               Moodify
             </h1>
-            <p className="text-lg md:text-xl text-theme-text max-w-2xl mx-auto opacity-90">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-theme-text max-w-4xl mx-auto opacity-90 px-4">
               Create personalized playlists based on your mood with Spotify and YouTube integration
             </p>
           </div>
           
-          <div className="flex justify-center">
+          <div className="flex justify-center w-full px-2">
             <MoodInput onMoodSubmit={handleMoodSubmit} />
           </div>
           
           {isLoading && (
-            <div className="space-y-4 flex flex-col items-center w-full max-w-lg mx-auto">
+            <div className="space-y-4 flex flex-col items-center w-full max-w-lg mx-auto px-4">
               <LoadingSpinner stage={loadingStage} />
               {loadingStage && (
-                <p className="text-theme-text text-sm text-center opacity-90">{loadingStage}</p>
+                <p className="text-theme-text text-sm sm:text-base text-center opacity-90 px-2">{loadingStage}</p>
               )}
             </div>
           )}
           
           {error && (
-            <div className="bg-theme-surface border-2 border-theme-accent text-theme-text p-6 rounded-xl max-w-lg mx-auto shadow-lg">
+            <div className="bg-theme-surface border-2 border-theme-accent text-theme-text p-4 sm:p-6 rounded-xl max-w-lg mx-auto shadow-lg">
               <div className="text-center">
                 <p className="font-bold text-lg text-theme-accent mb-2">Oops! Something went wrong</p>
-                <p className="text-theme-text opacity-80">{error}</p>
+                <p className="text-theme-text opacity-80 text-sm sm:text-base">{error}</p>
               </div>
             </div>
           )}
           
           {playlist && currentMood && (
-            <div className="w-full space-y-6">
-              <div className="text-center">
-                <h2 className="text-2xl md:text-3xl font-bold text-theme-text mb-2">
+            <div className="w-full space-y-4 sm:space-y-6 flex-1 flex flex-col">
+              <div className="text-center px-2">
+                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-theme-text mb-2">
                   Your Mood Playlist
                 </h2>
-                <p className="text-theme-disabled capitalize">
+                <p className="text-theme-disabled capitalize text-sm sm:text-base md:text-lg">
                   Curated for: <span className="text-theme-accent font-medium">"{currentMood}"</span>
                 </p>
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center w-full flex-1 px-2">
                 <Playlist tracks={playlist} />
               </div>
             </div>

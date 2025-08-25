@@ -45,10 +45,10 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
   }
 
   return (
-    <div className="w-full max-w-md">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg px-2">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div className="space-y-2">
-          <label htmlFor="mood-input" className="block text-sm font-medium text-theme-text">
+          <label htmlFor="mood-input" className="block text-sm sm:text-base font-medium text-theme-text text-center sm:text-left">
             How are you feeling?
           </label>
           <input
@@ -56,25 +56,25 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
             type="text"
             value={mood}
             onChange={(e) => setMood(e.target.value)}
-            placeholder="Describe your current mood in detail..."
-            className="w-full p-4 rounded-lg bg-theme-surface border border-theme-disabled text-theme-text placeholder-theme-disabled focus:outline-none focus:ring-2 focus:ring-theme-accent focus:border-theme-accent text-base transition duration-200 ease-in-out"
+            placeholder="Describe your current mood..."
+            className="w-full p-2.5 sm:p-3 md:p-4 rounded-lg bg-theme-surface border border-theme-disabled text-theme-text placeholder-theme-disabled focus:outline-none focus:ring-2 focus:ring-theme-accent focus:border-theme-accent text-sm sm:text-base transition duration-200 ease-in-out"
             autoComplete="off"
             maxLength={200}
           />
           {error && (
-            <p className="text-theme-accent text-sm mt-1">{error}</p>
+            <p className="text-theme-accent text-xs sm:text-sm mt-1 text-center">{error}</p>
           )}
           
           {/* Suggested Moods */}
-          <div className="mt-3">
-            <p className="text-xs text-theme-disabled mb-2">Try these moods:</p>
-            <div className="flex flex-wrap gap-2">
-              {suggestedMoods.map((suggestedMood, index) => (
+          <div className="mt-2 sm:mt-3">
+            <p className="text-xs sm:text-sm text-theme-disabled mb-1.5 sm:mb-2 text-center">Try these moods:</p>
+            <div className="flex flex-wrap gap-1 sm:gap-1.5 justify-center">
+              {suggestedMoods.slice(0, 8).map((suggestedMood, index) => (
                 <button
                   key={index}
                   type="button"
                   onClick={() => handleSuggestedMood(suggestedMood)}
-                  className="px-3 py-1 text-xs bg-theme-surface hover:bg-theme-accent text-theme-text rounded-full transition duration-200 hover:text-white border border-theme-disabled hover:border-theme-accent"
+                  className="px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs bg-theme-surface hover:bg-theme-accent text-theme-text rounded-full transition duration-200 hover:text-white border border-theme-disabled hover:border-theme-accent touch-friendly"
                 >
                   {suggestedMood}
                 </button>
@@ -85,9 +85,9 @@ export default function MoodInput({ onMoodSubmit }: MoodInputProps) {
         <button
           type="submit"
           disabled={!mood.trim()}
-          className="w-full bg-theme-accent hover:bg-theme-accent-hover disabled:bg-theme-disabled disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg text-base transition duration-200 ease-in-out transform hover:scale-[1.02] disabled:hover:scale-100 shadow-lg"
+          className="w-full bg-theme-accent hover:bg-theme-accent-hover disabled:bg-theme-disabled disabled:cursor-not-allowed text-white font-semibold py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-200 ease-in-out transform hover:scale-[1.02] disabled:hover:scale-100 shadow-lg touch-friendly touch-target"
         >
-          Generate Your Playlist
+          Generate Playlist
         </button>
       </form>
     </div>

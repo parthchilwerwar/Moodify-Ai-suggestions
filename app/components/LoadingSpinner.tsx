@@ -36,10 +36,10 @@ export default function LoadingSpinner({ stage }: LoadingSpinnerProps) {
   }, [stage])
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg mx-auto px-2">
       <Progress 
         value={progress} 
-        className="h-3 bg-theme-surface border border-theme-disabled"
+        className="h-2 sm:h-3 bg-theme-surface border border-theme-disabled"
       />
     </div>
   )

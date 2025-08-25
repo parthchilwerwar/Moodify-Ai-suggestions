@@ -35,13 +35,13 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-1.5 bg-theme-surface text-theme-text rounded-r-md shadow-lg hover:bg-theme-accent focus:outline-none focus:ring-2 focus:ring-theme-accent transition-all duration-300 ${
-          isOpen ? 'transform translate-x-64 md:translate-x-80' : ''
+        className={`fixed top-1/2 -translate-y-1/2 left-0 z-50 p-1.5 sm:p-2 bg-theme-surface text-theme-text rounded-r-md shadow-lg hover:bg-theme-accent focus:outline-none focus:ring-2 focus:ring-theme-accent transition-all duration-300 touch-friendly touch-target ${
+          isOpen ? 'transform translate-x-56 sm:translate-x-64 md:translate-x-80' : ''
         }`}
         aria-label={isOpen ? "Close recent playlists" : "Open recent playlists"}
         aria-expanded={isOpen}
       >
-        {isOpen ? <FaChevronLeft size={20} /> : <FaChevronRight size={20} />}
+        {isOpen ? <FaChevronLeft size={16} className="sm:text-lg" /> : <FaChevronRight size={16} className="sm:text-lg" />}
       </button>
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
@@ -50,25 +50,25 @@ const RecentPlaylistsSidebar: React.FC<RecentPlaylistsSidebarProps> = ({ playlis
         onClick={() => setIsOpen(false)}
       ></div>
       <aside
-        className={`fixed left-0 top-0 h-full w-64 md:w-80 bg-theme-background p-6 overflow-y-auto transition-transform duration-300 ease-in-out z-50 shadow-lg border-r border-theme-disabled ${
+        className={`fixed left-0 top-0 h-full w-56 sm:w-64 md:w-80 bg-theme-background p-4 sm:p-6 overflow-y-auto scrollbar-thin transition-transform duration-300 ease-in-out z-50 shadow-lg border-r border-theme-disabled ${
           isOpen ? 'transform translate-x-0' : 'transform -translate-x-full'
         }`}
         aria-hidden={!isOpen}
       >
-        <h2 className="text-2xl font-bold mb-6 text-theme-text">Recent Playlists</h2>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-6 text-theme-text">Recent Playlists</h2>
         {playlists.length === 0 ? (
-          <p className="text-base text-theme-disabled">No recent playlists yet.</p>
+          <p className="text-sm sm:text-base text-theme-disabled">No recent playlists yet.</p>
         ) : (
           playlists.map((playlist, index) => (
             <div 
               key={index} 
-              className={`mb-4 p-4 bg-theme-surface rounded-lg shadow-md cursor-pointer transition-colors duration-200 transform hover:scale-104 border border-theme-disabled ${
+              className={`mb-3 sm:mb-4 p-3 sm:p-4 bg-theme-surface rounded-lg shadow-md cursor-pointer transition-colors duration-200 transform hover:scale-[1.02] border border-theme-disabled touch-friendly ${
                 selectedPlaylistIndex === index ? 'bg-theme-accent bg-opacity-20 border-theme-accent' : 'hover:bg-theme-background hover:border-theme-accent'
               }`}
               onClick={() => handlePlaylistClick(index)}
             >
-              <h3 className={`text-lg font-semibold mb-2 ${selectedPlaylistIndex === index ? 'text-white' : 'text-theme-text'}`}>{playlist.mood}</h3>
-              <ul className="text-sm space-y-1">
+              <h3 className={`text-sm sm:text-base md:text-lg font-semibold mb-2 line-clamp-2 ${selectedPlaylistIndex === index ? 'text-white' : 'text-theme-text'}`}>{playlist.mood}</h3>
+              <ul className="text-xs sm:text-sm space-y-1">
                 {playlist.tracks.slice(0, 3).map((track, trackIndex) => (
                   <li key={trackIndex} className={`truncate ${selectedPlaylistIndex === index ? 'text-white opacity-90' : 'text-theme-disabled'}`}>
                     {track.title} - {track.artist}
