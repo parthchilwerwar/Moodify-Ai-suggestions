@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: 'Moodify - Mood-Based Playlist Generator',
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-theme-background min-h-screen font-jakarta overflow-x-hidden">
         {children}
+        <Analytics />
       </body>
     </html>
   )
