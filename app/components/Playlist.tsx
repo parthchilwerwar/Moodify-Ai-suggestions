@@ -61,23 +61,45 @@ export default function Playlist({ tracks }: PlaylistProps) {
                 <span className="text-theme-accent font-bold text-xs sm:text-sm">{String(index + 1).padStart(2, '0')}</span>
               </div>
               
-              {/* Album Image */}
-              {track.spotify?.albumImage && (
-                <img 
-                  src={track.spotify.albumImage} 
-                  alt={`${track.title} album cover`}
-                  className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-md object-cover shadow-md group-hover:shadow-lg transition-shadow flex-shrink-0"
-                />
-              )}
+              {/* Album/Thumbnail Image */}
+              <img 
+                src={track.spotify?.albumImage || track.youtube?.thumbnailUrl || '/favicon.ico'} 
+                alt={`${track.title} cover`}
+                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-md object-cover shadow-md group-hover:shadow-lg transition-shadow flex-shrink-0"
+                onError={(e) => {
+                  // Fallback to favicon.ico if image fails to load
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== '/favicon.ico') {
+                    target.src = '/favicon.ico';
+                  }
+                }}
+              />
               
               {/* Track Details */}
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-theme-text text-xs sm:text-sm md:text-base truncate group-hover:text-theme-accent transition-colors leading-tight">
                   {track.title}
                 </h3>
-                <p className="text-theme-disabled text-xs sm:text-sm truncate">
-                  {track.artist}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-theme-disabled text-xs sm:text-sm truncate">
+                    {track.artist}
+                  </p>
+                  {/* Platform availability indicators */}
+                  <div className="flex gap-1">
+                    {track.spotify && (
+                      <div className="w-2 h-2 bg-green-500 rounded-full" title="Available on Spotify" />
+                    )}
+                    {track.youtube && (
+                      <div className="w-2 h-2 bg-red-500 rounded-full" title="Available on YouTube" />
+                    )}
+                  </div>
+                </div>
+                {/* Reasoning for mood match */}
+                {track.reasoning && (
+                  <p className="text-theme-disabled text-xs italic mt-1 truncate">
+                    {track.reasoning}
+                  </p>
+                )}
               </div>
               
               {/* Action Buttons */}

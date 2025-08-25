@@ -10,42 +10,70 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid tracks data' }, { status: 400 });
     }
 
-    // Step 1: Enrich with Spotify data
-    let enrichedTracks;
-    try {
-      enrichedTracks = await enrichTracksWithSpotify(tracks);
-    } catch (spotifyError) {
-      enrichedTracks = tracks.map(track => ({ ...track, spotify: null }));
-    }
+    console.log(`Enriching ${tracks.length} tracks with music platform data...`);
 
-    // Step 2: Enrich with YouTube data
-    try {
-      const youtubeEnrichedTracks = await searchMultipleYouTubeTracks(enrichedTracks);
+    // Enhanced parallel processing - search both platforms simultaneously for each track
+    const enrichedTracks = await Promise.all(tracks.map(async (track, index) => {
+      console.log(`Processing track ${index + 1}: "${track.title}" by "${track.artist}"`);
       
-      // Merge Spotify and YouTube data
-      const finalTracks = youtubeEnrichedTracks.map((track, index) => ({
-        ...track,
-        spotify: enrichedTracks[index]?.spotify || null,
-      }));
+      try {
+        // Search both platforms in parallel for each track
+        const [spotifyResult, youtubeResult] = await Promise.allSettled([
+          searchSpotifyTrack(track.title, track.artist),
+          searchMultipleYouTubeTracks([track]).then(results => results[0]?.youtube)
+        ]);
 
-      // Count successful enrichments
-      const spotifySuccesses = finalTracks.filter(track => track.spotify !== null).length;
-      const youtubeSuccesses = finalTracks.filter(track => track.youtube !== null).length;
-      
-      console.log(`Enrichment complete: ${spotifySuccesses}/${tracks.length} Spotify, ${youtubeSuccesses}/${tracks.length} YouTube`);
+        let spotify = null;
+        let youtube = null;
 
-      return NextResponse.json({ 
-        tracks: finalTracks
-      });
+        // Handle Spotify result
+        if (spotifyResult.status === 'fulfilled' && spotifyResult.value) {
+          spotify = spotifyResult.value;
+          console.log(`✓ Found on Spotify: "${track.title}" by "${track.artist}"`);
+        } else {
+          console.log(`✗ Not found on Spotify: "${track.title}" by "${track.artist}"`);
+        }
 
-    } catch (youtubeError) {
-      console.warn('YouTube enrichment failed:', youtubeError);
-      
-      // Return just Spotify data if YouTube fails
-      return NextResponse.json({ 
-        tracks: enrichedTracks
-      });
-    }
+        // Handle YouTube result
+        if (youtubeResult.status === 'fulfilled' && youtubeResult.value) {
+          youtube = youtubeResult.value;
+          console.log(`✓ Found on YouTube: "${track.title}" by "${track.artist}"`);
+        } else {
+          console.log(`✗ Not found on YouTube: "${track.title}" by "${track.artist}"`);
+        }
+
+        return {
+          ...track,
+          spotify,
+          youtube
+        };
+        
+      } catch (error) {
+        console.error(`Error processing track "${track.title}" by "${track.artist}":`, error);
+        return {
+          ...track,
+          spotify: null,
+          youtube: null
+        };
+      }
+    }));
+
+    // Count successful enrichments
+    const spotifySuccesses = enrichedTracks.filter(track => track.spotify !== null).length;
+    const youtubeSuccesses = enrichedTracks.filter(track => track.youtube !== null).length;
+    const totalWithData = enrichedTracks.filter(track => track.spotify !== null || track.youtube !== null).length;
+    
+    console.log(`Enrichment complete: ${spotifySuccesses}/${tracks.length} on Spotify, ${youtubeSuccesses}/${tracks.length} on YouTube, ${totalWithData}/${tracks.length} total with data`);
+
+    return NextResponse.json({ 
+      tracks: enrichedTracks,
+      stats: {
+        total: tracks.length,
+        spotify: spotifySuccesses,
+        youtube: youtubeSuccesses,
+        withData: totalWithData
+      }
+    });
 
   } catch (error) {
     console.error('Error enriching tracks:', error);

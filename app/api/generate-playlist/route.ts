@@ -10,10 +10,15 @@ export async function POST(request: NextRequest) {
   const { mood } = await request.json();
   const cleanedMood = mood.replace(/\uD83D[\uDE00-\uDE4F]/g, '').trim();
 
-  const fixedPlaylistLength = 8;
+  // Increase playlist length to 10 songs
+  const fixedPlaylistLength = 10;
 
   try {
-    const result = await generatePlaylistWithModel("openai/gpt-oss-120b", cleanedMood, fixedPlaylistLength);
+    // Add randomization to ensure different results each time
+    const sessionId = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    console.log(`Generating unique playlist for mood: "${cleanedMood}" (Session: ${sessionId})`);
+    
+    const result = await generatePlaylistWithModel("openai/gpt-oss-120b", cleanedMood, fixedPlaylistLength, sessionId);
     return result;
   } catch (error: any) {
     console.error(`Error with openai/gpt-oss-120b model:`, error.message);
@@ -39,46 +44,93 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function generatePlaylistWithModel(currentModel: string, cleanedMood: string, fixedPlaylistLength: number) {
+async function generatePlaylistWithModel(currentModel: string, cleanedMood: string, fixedPlaylistLength: number, sessionId?: string) {
   
-    const prompt = `You are an expert music curator AI with extensive knowledge of music from 2020 to 2025. 
+    // Generate a timestamp-based seed for uniqueness
+    const timestamp = sessionId ? sessionId : `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    
+    // Analyze the mood input for context clues
+    const currentYear = new Date().getFullYear();
+    const lowerMood = cleanedMood.toLowerCase();
+    const isTrendingRequest = lowerMood.includes('trending') || lowerMood.includes('popular') || lowerMood.includes('viral') || lowerMood.includes('current') || lowerMood.includes('latest');
+    const hasYearContext = lowerMood.includes('2024') || lowerMood.includes('2025');
+    
+    // Determine year focus based on context
+    let yearFocus = '';
+    if (isTrendingRequest || hasYearContext || lowerMood.includes('new')) {
+      yearFocus = `Focus heavily on 2024-2025 releases. Prioritize very recent songs that are trending NOW.`;
+    } else {
+      yearFocus = `Mix songs from 2020-2025, with emphasis on recent years (2023-2025).`;
+    }
+    
+    const prompt = `You are an expert music curator AI with extensive knowledge of music from 2020 to 2025 from ALL OVER THE WORLD. Current date: August 25, 2025.
 
 CRITICAL INSTRUCTIONS:
 - You MUST return ONLY valid JSON - no text before or after
-- You MUST return exactly ${fixedPlaylistLength} songs
+- You MUST return exactly ${fixedPlaylistLength} UNIQUE and DIFFERENT songs
+- NEVER repeat songs from previous generations - be creative and diverse
 - Use double quotes for ALL strings
 - Do NOT use single quotes
 - Do NOT add trailing commas
 - Ensure all JSON syntax is perfect
+- Each generation should have completely DIFFERENT songs, even for the same mood
+- ${yearFocus}
+
+CONTEXT ANALYSIS for "${cleanedMood}":
+${isTrendingRequest ? '- User wants TRENDING/POPULAR songs - focus on viral hits and current chart-toppers from 2024-2025' : ''}
+${hasYearContext ? '- User mentioned specific recent years - prioritize songs from that timeframe' : ''}
+
+GLOBAL DIVERSITY REQUIREMENTS:
+- Include songs from DIFFERENT COUNTRIES and cultures (not just English songs)
+- Mix languages: English, Spanish, Korean (K-Pop), Japanese (J-Pop), Hindi, French, Portuguese, Italian, German, Arabic, etc.
+- Include artists from: USA, UK, Korea, Japan, India, Latin America, Brazil, France, Germany, Nigeria, etc.
+- Genres from around the world: K-Pop, J-Pop, Reggaeton, Afrobeats, Bollywood, French Pop, German Rap, Arabic Pop, etc.
+- Mix mainstream international hits with regional popular songs
+- Think globally about mood interpretation across cultures
+
+RECENCY REQUIREMENTS:
+- If mood suggests "trending/popular/viral/current/latest": 80% of songs should be from 2024-2025
+- Otherwise: 60% from 2023-2025, 40% from 2020-2022
+- NO songs older than 2020
+- Focus on songs that were actually popular/trending in their respective years
 
 REQUIRED FIELDS for each song:
-- title: string (song name)
-- artist: string (artist name)  
-- releaseYear: number (2023-2025, no quotes around numbers)
+- title: string (song name - must be UNIQUE, can be in any language)
+- artist: string (artist name - vary the artists from different countries)  
+- releaseYear: number (2020-2025, no quotes around numbers)
 - spotifyId: "" (empty string)
-- searchQuery: string (for searching)
-- reasoning: string (max 50 characters)
+- searchQuery: string (for searching - use romanized/English version if needed)
+- reasoning: string (max 50 characters explaining mood connection)
+
+DIVERSITY REQUIREMENTS:
+- Mix different artists from different countries (don't repeat artists if possible)
+- Include various global genres: K-Pop, J-Pop, Reggaeton, Afrobeats, Bollywood, French Pop, German Rap, Arabic Pop, Latin Trap, Brazilian Funk, etc.
+- Include both international mainstream hits and regional favorites
+- Represent at least 4-5 different countries/cultures in the playlist
+- Think creatively about how different cultures express the same mood through music
 
 Return ONLY this exact JSON format:
 [
   {
-    "title": "Song Title",
-    "artist": "Artist Name",
-    "releaseYear": 2024,
+    "title": "Song Title (any language)",
+    "artist": "Artist Name (from any country)",
+    "releaseYear": 2025,
     "spotifyId": "",
     "searchQuery": "Song Title Artist Name",
     "reasoning": "Matches mood perfectly"
   }
 ]
 
-Generate playlist for mood: "${cleanedMood}"
-Use recent popular songs from 2023-2025. Mix genres: Pop, Hip-Hop, R&B, Electronic.`;
+Generate GLOBALLY DIVERSE playlist for mood: "${cleanedMood}"
+Session ID: ${timestamp} (use this for unique generation)
+Be creative and generate FRESH, DIFFERENT songs from ALL CORNERS OF THE WORLD!
+${isTrendingRequest ? 'FOCUS ON TRENDING/VIRAL SONGS FROM 2024-2025!' : 'Include songs in multiple languages and from various cultures!'}`;
 
     const completion = await groq.chat.completions.create({
       messages: [
         {
           role: "system",
-          content: "You are a music curator AI. ALWAYS respond with ONLY valid JSON. No explanations, no markdown formatting, no extra text. Just a pure JSON array of exactly 8 songs. Use double quotes for all strings. No trailing commas. Perfect JSON syntax only."
+          content: `You are a globally-minded creative music curator AI with deep knowledge of international music from 2020-2025. Current date: August 25, 2025. ALWAYS respond with ONLY valid JSON. Generate UNIQUE and DIVERSE songs from ALL AROUND THE WORLD each time, never repeating previous suggestions. Focus on variety in artists, genres, languages, and countries. When users mention "trending", "popular", "viral", "current", or specific years like "2025", prioritize very recent songs (2024-2025) that are actually trending. Include K-Pop, J-Pop, Reggaeton, Afrobeats, Bollywood, French Pop, German music, Arabic songs, Latin music, and more. Think globally! Current session: ${timestamp}`
         },
         {
           role: "user",
@@ -86,9 +138,9 @@ Use recent popular songs from 2023-2025. Mix genres: Pop, Hip-Hop, R&B, Electron
         },
       ],
       model: currentModel,
-      temperature: 0.5, // Reduced for more consistent output
+      temperature: 0.8, // Increased for more creativity and variation
       max_tokens: 3000,
-      top_p: 0.9,
+      top_p: 0.95, // Increased for more diverse outputs
       stream: false
     });
 
@@ -216,6 +268,8 @@ Use recent popular songs from 2023-2025. Mix genres: Pop, Hip-Hop, R&B, Electron
       playlist: validatedPlaylist,
       mood: cleanedMood,
       source: 'groq-ai',
-      model: "openai/gpt-oss-120b"
+      model: "openai/gpt-oss-120b",
+      sessionId: timestamp,
+      generated: new Date().toISOString()
     });
 }

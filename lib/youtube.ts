@@ -32,7 +32,8 @@ export async function searchYouTubeMusic(query: string, maxResults = 10): Promis
       return { videos: [], totalResults: 0 };
     }
     
-    // Search for videos with proper parameter typing
+    // Search for videos with proper parameter typing - prioritize recent content
+    const currentYear = new Date().getFullYear();
     const searchResponse = await youtube.search.list({
       part: 'snippet' as any,
       q: `${query} music video song`,
@@ -41,6 +42,7 @@ export async function searchYouTubeMusic(query: string, maxResults = 10): Promis
       videoCategoryId: '10', // Music category
       order: 'relevance' as any,
       safeSearch: 'none' as any,
+      publishedAfter: `${currentYear - 5}-01-01T00:00:00Z`, // Only videos from last 5 years (2020+)
     });
 
     if (!searchResponse.data?.items || !Array.isArray(searchResponse.data.items)) {
@@ -76,7 +78,7 @@ export async function searchYouTubeMusic(query: string, maxResults = 10): Promis
             title: title,
             artist: artist,
             description: video.snippet.description || '',
-            thumbnailUrl: video.snippet.thumbnails?.high?.url || video.snippet.thumbnails?.default?.url || '',
+            thumbnailUrl: video.snippet.thumbnails?.high?.url || video.snippet.thumbnails?.default?.url || '/favicon.ico',
             videoUrl: `https://www.youtube.com/watch?v=${video.id}`,
             publishedAt: video.snippet.publishedAt || '',
             viewCount: (video.statistics as any)?.viewCount || '0',
@@ -181,7 +183,7 @@ export async function getTrendingMusicVideos(maxResults = 20): Promise<YouTubeVi
             title,
             artist,
             description: video.snippet.description || '',
-            thumbnailUrl: video.snippet.thumbnails?.high?.url || video.snippet.thumbnails?.default?.url || '',
+            thumbnailUrl: video.snippet.thumbnails?.high?.url || video.snippet.thumbnails?.default?.url || '/favicon.ico',
             videoUrl: `https://www.youtube.com/watch?v=${video.id}`,
             publishedAt: video.snippet.publishedAt || '',
             viewCount: (video.statistics as any)?.viewCount || '0',

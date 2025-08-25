@@ -108,11 +108,17 @@ export default function Home() {
           return;
         }
         
-        setLoadingStage('Fetching YouTube data...');
+        setLoadingStage('Finding tracks on Spotify and YouTube...');
         const musicData = await musicResponse.json();
         
         if (musicResponse.ok) {
           console.log('Music data loaded successfully');
+          
+          // Show platform statistics
+          if (musicData.stats) {
+            const { spotify, youtube, withData, total } = musicData.stats;
+            console.log(`Platform availability: ${spotify}/${total} on Spotify, ${youtube}/${total} on YouTube, ${withData}/${total} total found`);
+          }
           
           // Final stage
           setLoadingStage('Finalizing your playlist...');
