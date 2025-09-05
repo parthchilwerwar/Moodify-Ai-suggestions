@@ -177,7 +177,7 @@ export default function Home() {
               Moodify
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-theme-text max-w-4xl mx-auto opacity-90 px-4">
-              Create personalized playlists based on your mood with Spotify and YouTube integration
+              Create personalized playlists based on your Mooood !
             </p>
           </div>
           
