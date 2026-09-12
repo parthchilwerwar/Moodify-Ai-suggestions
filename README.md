@@ -17,7 +17,7 @@ Moodify is a Next.js web application that generates personalized music playlists
 
 ## 🛠 Tech Stack
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Frontend**: Next.js 15, React 18, TypeScript, Tailwind CSS
 - **AI**: Groq API (Mixtral-8x7b-32768)
 - **Music APIs**: Spotify Web API, YouTube Data API v3
 - **Animations**: Framer Motion
@@ -35,8 +35,10 @@ cd Moodify-Ai-suggestions
 
 ### 2. Install Dependencies
 
+Use Node.js 22 or later.
+
 ```bash
-npm install
+npm ci
 ```
 
 ### 3. Set Up Environment Variables
@@ -99,6 +101,19 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Verify Changes
+
+```bash
+npm test
+npm run typecheck
+npm run lint
+npm run build
+```
+
+Tests and builds do not require API keys. Playlist generation requires `GROQ_API_KEY` at runtime and returns HTTP 503 when it is missing. Malformed JSON and empty or non-string moods return HTTP 400. The regression tests do not call external APIs.
+
+The npm override makes Next.js 15 use the patched PostCSS 8 version declared by this project. Keep the override until Next.js no longer pins the affected PostCSS version.
 
 ## 📝 API Endpoints
 

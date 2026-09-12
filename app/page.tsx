@@ -210,7 +210,7 @@ export default function Home() {
                   Your Mood Playlist
                 </h2>
                 <p className="text-theme-disabled capitalize text-sm sm:text-base md:text-lg">
-                  Curated for: <span className="text-theme-accent font-medium">"{currentMood}"</span>
+                  Curated for: <span className="text-theme-accent font-medium">&quot;{currentMood}&quot;</span>
                 </p>
               </div>
               <div className="flex justify-center w-full flex-1 px-2">
@@ -225,4 +225,3 @@ export default function Home() {
   )
   
 }
-

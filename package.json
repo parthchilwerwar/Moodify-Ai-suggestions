@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --import tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@coreui/icons": "^3.0.1",
@@ -27,7 +29,7 @@
     "groq-sdk": "^0.30.0",
     "gsap": "^3.12.5",
     "lucide-react": "^0.541.0",
-    "next": "^14.2.32",
+    "next": "15.5.25",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.3.0",
@@ -42,8 +44,16 @@
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18",
     "@types/spotify-web-api-node": "^5.0.11",
-    "postcss": "^8.4.41",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.25",
+    "postcss": "^8.5.28",
     "tailwindcss": "^3.4.10",
+    "tsx": "^4.23.13",
     "typescript": "^5.5.4"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "$postcss"
+    }
   }
 }

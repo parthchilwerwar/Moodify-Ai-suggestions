@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 export async function POST(request: NextRequest) {
-  const { mood } = await request.json();
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  const mood = body?.mood;
+  if (typeof mood !== 'string') {
+    return NextResponse.json({ error: 'Mood must be a non-empty string' }, { status: 400 });
+  }
   const cleanedMood = mood.replace(/\uD83D[\uDE00-\uDE4F]/g, '').trim();
+  if (!cleanedMood) {
+    return NextResponse.json({ error: 'Mood must be a non-empty string' }, { status: 400 });
+  }
+  if (!process.env.GROQ_API_KEY) {
+    return NextResponse.json({ error: 'Playlist generation is not configured' }, { status: 503 });
+  }
 
   // Increase playlist length to 10 songs
   const fixedPlaylistLength = 10;
@@ -45,7 +56,8 @@ export async function POST(request: NextRequest) {
 }
 
 async function generatePlaylistWithModel(currentModel: string, cleanedMood: string, fixedPlaylistLength: number, sessionId?: string) {
-  
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
     // Generate a timestamp-based seed for uniqueness
     const timestamp = sessionId ? sessionId : `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     
